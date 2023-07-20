@@ -1,5 +1,7 @@
 package br.com.matheus.learningspring.model;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +31,8 @@ public class User {
     @Column(length = 6, nullable = false)
     private String type;
 
-    @Column(columnDefinition = "DECIMAL DEFAULT 0.0")
+    @Column(columnDefinition = "DECIMAL")
+    @ColumnDefault("0")
     private float balance;
 
     public User() {

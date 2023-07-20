@@ -17,6 +17,7 @@ import br.com.matheus.learningspring.dto.CreateDepositDto;
 import br.com.matheus.learningspring.dto.UserDto;
 import br.com.matheus.learningspring.model.User;
 import br.com.matheus.learningspring.service.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody final UserDto userData) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody final UserDto userData) {
         final User createdUser = userService.createUser(userData);
 
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
@@ -49,7 +50,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody final UserDto userData, @PathVariable final String id) {
+    public ResponseEntity<User> updateUser(@Valid @RequestBody final UserDto userData, @PathVariable final String id) {
         final User updatedUser = userService.updateUser(userData, Long.parseLong(id));
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -64,7 +65,7 @@ public class UserController {
 
     // Transactions
     @PostMapping("/{id}/deposit")
-    public ResponseEntity<User> createDeposit(@RequestBody final CreateDepositDto depositData,
+    public ResponseEntity<User> createDeposit(@Valid @RequestBody final CreateDepositDto depositData,
             @PathVariable final String id) {
         final User depositedUser = userService.createDeposit(depositData, Long.parseLong(id));
 

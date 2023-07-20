@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.matheus.learningspring.dto.CreateTransactionDto;
 import br.com.matheus.learningspring.model.Transaction;
 import br.com.matheus.learningspring.service.TransactionService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/transactions")
@@ -23,7 +24,8 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> createTransaction(@RequestBody final CreateTransactionDto transactionData) {
+    public ResponseEntity<Transaction> createTransaction(
+            @Valid @RequestBody final CreateTransactionDto transactionData) {
 
         final Transaction createTransaction = transactionService.createTransaction(transactionData);
 

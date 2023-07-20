@@ -3,6 +3,7 @@ package br.com.matheus.learningspring.exception;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,6 +18,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private final MessageSource messages;
+
+    public GlobalExceptionHandler(MessageSource messages) {
+        this.messages = messages;
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
@@ -40,22 +47,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(returnObject, HttpStatus.BAD_REQUEST);
     }
 
+    // @ExceptionHandler({ AppException.class })
+    // public ResponseEntity<Object> handleAppException(final AppException ex) {
+
+    // final HashMap<String, String> returnObject = new HashMap<>();
+
+    // returnObject.put("message", ex.getMessage());
+
+    // return new ResponseEntity<>(returnObject, ex.getStatusCode());
+    // }
+
     @ExceptionHandler({ AppException.class })
-    public ResponseEntity<Object> handleAppException(final AppException ex) {
+    public ResponseEntity<Object> handleAppException(final AppException ex, final WebRequest request) {
 
         final HashMap<String, String> returnObject = new HashMap<>();
 
-        returnObject.put("message", ex.getMessage());
+        returnObject.put("message", messages.getMessage("message." + ex.getMessage(), null, request.getLocale()));
 
         return new ResponseEntity<>(returnObject, ex.getStatusCode());
     }
 
     @ExceptionHandler({ Exception.class })
-    public ResponseEntity<Object> handleInternal(final RuntimeException ex) {
+    public ResponseEntity<Object> handleInternal(final RuntimeException ex, final WebRequest request) {
 
         final HashMap<String, String> returnObject = new HashMap<>();
 
-        returnObject.put("message", "Internal Server Error");
+        returnObject.put("message", messages.getMessage("message.error", null, request.getLocale()));
 
         System.out.println(ex.getMessage());
 
